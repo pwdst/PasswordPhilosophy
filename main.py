@@ -39,10 +39,14 @@ class PasswordProcessor:
                                                             match_character=regex_match.group('match_character'),
                                                             password_string=regex_match.group('password_string'))
 
+        if password_validation_entry.max_count < password_validation_entry.min_count:
+            return False, None
+
         return True, password_validation_entry
 
     def _validate_password_entry(self, password_validation_entry: PasswordValidationEntry) -> bool:
         return False
+
 
 if __name__ == '__main__':
     exercise_lines = _get_exercise_lines()
