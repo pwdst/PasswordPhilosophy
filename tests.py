@@ -11,7 +11,11 @@ class TestTryParsePasswordEntry:
     @pytest.mark.parametrize("entry,expected_min_count,expected_max_count,expected_character,expected_password_string",
                              [("1-3 a: abcde", 1, 3, "a", "abcde"),
                               ("1-3 b: cdefg", 1, 3, "b", "cdefg"),
-                              ("2-9 c: ccccccccc", 2, 9, "c", "ccccccccc")])
+                              ("2-9 c: ccccccccc", 2, 9, "c", "ccccccccc"),
+                              ("1-10 a: abcde", 1, 10, "a", "abcde"),
+                              ("1-40 b: cdefg", 1, 40, "b", "cdefg"),
+                              ("2-100 c: ccccccccc", 2, 100, "c", "ccccccccc")
+                              ])
     def test_try_parse_password_entry_succeeds_valid_input(self, entry: str, expected_min_count: int,
                                                            expected_max_count: int,
                                                            expected_character: str, expected_password_string: str):
