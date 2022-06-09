@@ -28,6 +28,8 @@ class PasswordProcessor:
     INPUT_STRING_PATTERN = r'^(?P<min_count>\d+)\-(?P<max_count>[1-9]\d*) (?P<match_character>[A-Za-z]): (?P<password_string>\w+)$'
 
     def check_password_entry(self, input_line: str) -> bool:
+        # TODO None, empty string,
+
         (successfully_parsed, password_validation_entry) = self._try_parse_password_entry(input_line)
 
         if successfully_parsed is False:

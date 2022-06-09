@@ -3,10 +3,24 @@ from main import PasswordProcessor, PasswordValidationEntry
 import pytest
 
 
-class TestTryParsePasswordEntry:
+class TestPasswordProcessor:
     @classmethod
     def setup_class(cls):
         cls.password_processor = PasswordProcessor()
+
+    @pytest.mark.parametrize("entry",
+                             ["1-3 a: abcde", "2-9 c: ccccccccc", "3-7 e: efghefghefgh"])
+    def test_check_password_entry_valid_entry_returns_true(self, entry: str):
+        check_password_result = self.password_processor.check_password_entry(entry)
+
+        assert check_password_result is True
+
+    @pytest.mark.parametrize("entry",
+                             ["1-3 b: cdefg", "2-8 c: ccccccccc", "3-7 e: efghefgh"])
+    def test_check_password_entry_invalid_entry_returns_false(self, entry: str):
+        check_password_result = self.password_processor.check_password_entry(entry)
+
+        assert check_password_result is False
 
     @pytest.mark.parametrize("entry,expected_min_count,expected_max_count,expected_character,expected_password_string",
                              [("1-3 a: abcde", 1, 3, "a", "abcde"),
@@ -65,12 +79,6 @@ class TestTryParsePasswordEntry:
 
         assert successfully_parsed is False
         assert password_validation_entry is None
-
-
-class TestValidatePasswordEntry:
-    @classmethod
-    def setup_class(cls):
-        cls.password_processor = PasswordProcessor()
 
     @pytest.mark.parametrize("match_character,min_count,max_count,password_string",
                              [("a", 1, 3, "abcdeabcde"), ("d", 1, 3, "cdefgcdefg"), ("c", 2, 9, "aaabbbccc")])
