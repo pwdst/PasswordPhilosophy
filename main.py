@@ -27,6 +27,14 @@ class PasswordProcessor:
 
     INPUT_STRING_PATTERN = r'^(?P<min_count>\d+)\-(?P<max_count>[1-9]+) (?P<match_character>[A-Za-z]): (?P<password_string>\w+)$'
 
+    def check_password_entry(self, input_line: str) -> bool:
+        (successfully_parsed, password_validation_entry) = self._try_parse_password_entry(input_line)
+
+        if successfully_parsed is False:
+            raise ValueError(input_line)
+
+        return self._validate_password_entry(password_validation_entry)
+
     def _try_parse_password_entry(self, entry: str) -> (bool, Optional[PasswordValidationEntry]):
         regex_match = self.compiled_regex.match(entry)
 
@@ -60,10 +68,21 @@ class PasswordProcessor:
 if __name__ == '__main__':
     exercise_lines = _get_exercise_lines()
 
+    valid_entries = 0
+    invalid_entries = 0
+
     password_processor = PasswordProcessor()
 
     for exercise_line in exercise_lines:
-        print(exercise_line)
-        (successfully_parsed, password_validation_entry) = password_processor._try_parse_password_entry(exercise_line)
-        print(successfully_parsed)
-        print(password_validation_entry)
+        check_password_result = password_processor.check_password_entry(exercise_line)
+
+        if check_password_result:
+            valid_entries += 1
+        else:
+            invalid_entries += 1
+
+    print(f'Total entries processed {len(exercise_lines)}')
+
+    print(f'Invalid entries {invalid_entries}')
+    print(f'Valid entries {valid_entries}')
+
