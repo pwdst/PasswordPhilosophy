@@ -44,8 +44,17 @@ class PasswordProcessor:
 
         return True, password_validation_entry
 
-    def _validate_password_entry(self, password_validation_entry: PasswordValidationEntry) -> bool:
-        return False
+    @staticmethod
+    def _validate_password_entry(password_validation_entry: PasswordValidationEntry) -> bool:
+        character_count = password_validation_entry.password_string.count(password_validation_entry.match_character)
+
+        if character_count < password_validation_entry.min_count:
+            return False
+
+        if character_count > password_validation_entry.max_count:
+            return False
+
+        return True
 
 
 if __name__ == '__main__':
