@@ -1,5 +1,5 @@
 from main import PasswordProcessor, PasswordValidationEntry
-
+from typing import Any
 import pytest
 
 
@@ -21,6 +21,16 @@ class TestPasswordProcessor:
         check_password_result = self.password_processor.check_password_entry(entry)
 
         assert check_password_result is False
+
+    @pytest.mark.parametrize("entry",
+                             [False, 3.14, 42, (1, "tuple")])
+    def test_check_password_entry_invalid_entry_raises_type_error(self, entry: Any):
+        with pytest.raises(TypeError):
+            self.password_processor.check_password_entry(entry)
+
+    def test_check_password_none_raises_type_error(self):
+        with pytest.raises(TypeError):
+            self.password_processor.check_password_entry(None)
 
     @pytest.mark.parametrize("entry,expected_min_count,expected_max_count,expected_character,expected_password_string",
                              [("1-3 a: abcde", 1, 3, "a", "abcde"),
